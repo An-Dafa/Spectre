@@ -72,6 +72,10 @@ This separation is the core idea of the project: the system can keep working wit
 
 The `Training` folder contains dataset generation, augmentation, training, and inference materials for the detection model. It includes scripts for synthetic data generation and notebooks for training and testing the YOLO model.
 
+## AI Usage
+
+AI was used during development to support code generation for synthetic data creation, model training workflows, and debugging.
+
 ## Application Flow
 
 The main document flow works like this:
