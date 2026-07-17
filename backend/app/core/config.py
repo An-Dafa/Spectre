@@ -24,6 +24,7 @@ DEFAULT_CLASS_CONFIDENCE: Dict[str, float] = {
     "Wajah": 0.25,
     "Plat_Nomor": 0.35,
     "Resi": 0.30,
+    "ATM": 0.35,
 }
 
 
@@ -39,6 +40,7 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./storage/spectre.db"
 
+    admin_token: str = "spectre-admin-demo-token"
     government_token: str = "spectre-government-demo-token"
     approver_token: str = "spectre-approver-demo-token"
     crypto_admin_token: str = "spectre-crypto-admin-demo-token"

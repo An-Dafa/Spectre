@@ -13,6 +13,7 @@ from app.services.government_access_service import (
     get_access_request,
     secure_original_download,
     serialize_access_request,
+    validate_admin_token,
     validate_approver_token,
     validate_government_token,
 )
@@ -43,6 +44,7 @@ def vault_record(record_id: str, db: Annotated[Session, Depends(get_db)]) -> dic
 
 
 @router.post("/government/access-requests")
+@router.post("/admin/access-requests")
 def government_create_access_request(
     db: Annotated[Session, Depends(get_db)],
     record_id: str,
@@ -50,14 +52,16 @@ def government_create_access_request(
     requester_role: str,
     reason: str,
     x_government_token: Annotated[str | None, Header()] = None,
+    x_admin_token: Annotated[str | None, Header()] = None,
 ) -> dict[str, object]:
-    validate_government_token(x_government_token)
+    validate_admin_token(x_admin_token or x_government_token)
     request = create_access_request(db, record_id, requester, requester_role, reason)
     db.commit()
     return {"request_id": request.request_id, "record_id": request.record_id, "status": request.status}
 
 
 @router.post("/government/access-requests/{request_id}/approve")
+@router.post("/admin/access-requests/{request_id}/approve")
 def government_approve_access_request(
     request_id: str,
     db: Annotated[Session, Depends(get_db)],
@@ -76,23 +80,27 @@ def government_approve_access_request(
 
 
 @router.get("/government/access-requests/{request_id}")
+@router.get("/admin/access-requests/{request_id}")
 def government_get_access_request(
     request_id: str,
     db: Annotated[Session, Depends(get_db)],
     x_government_token: Annotated[str | None, Header()] = None,
+    x_admin_token: Annotated[str | None, Header()] = None,
 ) -> dict[str, object]:
-    validate_government_token(x_government_token)
+    validate_admin_token(x_admin_token or x_government_token)
     return serialize_access_request(get_access_request(db, request_id))
 
 
 @router.get("/government/access-requests/{request_id}/secure-original")
+@router.get("/admin/access-requests/{request_id}/secure-original")
 def government_secure_original(
     request_id: str,
     access_token: str,
     db: Annotated[Session, Depends(get_db)],
     x_government_token: Annotated[str | None, Header()] = None,
+    x_admin_token: Annotated[str | None, Header()] = None,
 ) -> Response:
-    validate_government_token(x_government_token)
+    validate_admin_token(x_admin_token or x_government_token)
     data, filename = secure_original_download(db, request_id, access_token)
     db.commit()
     return Response(

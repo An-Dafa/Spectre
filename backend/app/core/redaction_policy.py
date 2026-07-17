@@ -17,6 +17,13 @@ class RedactionRule:
 
 
 _REDACTION_PROFILES = {
+    "admin": RedactionRule(
+        profile="admin",
+        mode="black_box",
+        label_enabled=True,
+        label_text="REDACTED",
+        active_classes=tuple(CANONICAL_CLASSES),
+    ),
     "government": RedactionRule(
         profile="government",
         mode="black_box",

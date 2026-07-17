@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from fastapi import HTTPException, status
 
 
-CANONICAL_CLASSES = ["KTP", "KK", "SIM", "Paspor", "Teks_Sensitif", "Wajah", "Plat_Nomor", "Resi"]
+CANONICAL_CLASSES = ["KTP", "KK", "SIM", "Paspor", "Teks_Sensitif", "Wajah", "Plat_Nomor", "Resi", "ATM"]
 
 _CLASS_ALIASES = {
     "ktp": "KTP",
@@ -41,6 +41,13 @@ _CLASS_ALIASES = {
     "label_pengiriman": "Resi",
     "label pengiriman": "Resi",
     "receipt": "Resi",
+    "atm": "ATM",
+    "kartu_atm": "ATM",
+    "kartu atm": "ATM",
+    "bank_card": "ATM",
+    "bank card": "ATM",
+    "debit_card": "ATM",
+    "debit card": "ATM",
 }
 
 
@@ -60,6 +67,7 @@ CLASS_INFO = {
     "Wajah": ClassInfo("Wajah", "high", "Wajah pengguna atau pihak ketiga dalam citra."),
     "Plat_Nomor": ClassInfo("Plat_Nomor", "medium", "Nomor kendaraan yang dapat menjadi identifier."),
     "Resi": ClassInfo("Resi", "high", "Label pengiriman yang dapat memuat nama, alamat, dan nomor telepon."),
+    "ATM": ClassInfo("ATM", "critical", "Kartu ATM/debit yang dapat memuat nomor kartu dan identitas finansial."),
 }
 
 

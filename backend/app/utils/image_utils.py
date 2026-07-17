@@ -11,6 +11,7 @@ ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 ALLOWED_DOCUMENT_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | {".pdf"}
 MAX_PDF_BYTES = 20 * 1024 * 1024
 MAX_PDF_RENDER_PIXELS = 20_000_000
+MAX_PDF_TOTAL_RENDER_PIXELS = 80_000_000
 PDF_RENDER_DPI = 150
 
 
@@ -61,22 +62,35 @@ def read_document_bytes_to_cv2(document_bytes: bytes, filename: str | None) -> n
     with document:
         if document.needs_pass:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password-protected PDFs are not supported")
-        if document.page_count != 1:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="MVP PDF upload currently supports exactly one page",
-            )
+        if document.page_count < 1:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PDF has no pages")
 
-        page = document[0]
-        scale = PDF_RENDER_DPI / 72
-        width = math.ceil(page.rect.width * scale)
-        height = math.ceil(page.rect.height * scale)
-        if width <= 0 or height <= 0 or width * height > MAX_PDF_RENDER_PIXELS:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PDF page dimensions are too large")
+        pages: list[np.ndarray] = []
+        total_pixels = 0
+        max_width = 0
+        for page in document:
+            scale = PDF_RENDER_DPI / 72
+            width = math.ceil(page.rect.width * scale)
+            height = math.ceil(page.rect.height * scale)
+            page_pixels = width * height
+            total_pixels += page_pixels
+            if width <= 0 or height <= 0 or page_pixels > MAX_PDF_RENDER_PIXELS or total_pixels > MAX_PDF_TOTAL_RENDER_PIXELS:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PDF page dimensions are too large")
 
-        pixmap = page.get_pixmap(dpi=PDF_RENDER_DPI, colorspace=pymupdf.csRGB, alpha=False)
-        rgb = np.frombuffer(pixmap.samples, dtype=np.uint8).reshape(pixmap.height, pixmap.width, 3)
-        return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+            pixmap = page.get_pixmap(dpi=PDF_RENDER_DPI, colorspace=pymupdf.csRGB, alpha=False)
+            rgb = np.frombuffer(pixmap.samples, dtype=np.uint8).reshape(pixmap.height, pixmap.width, 3)
+            bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+            pages.append(bgr)
+            max_width = max(max_width, bgr.shape[1])
+
+        total_height = sum(page.shape[0] for page in pages)
+        stitched = np.full((total_height, max_width, 3), 255, dtype=np.uint8)
+        y = 0
+        for page in pages:
+            height, width = page.shape[:2]
+            stitched[y:y + height, :width] = page
+            y += height
+        return stitched
 
 
 def get_image_shape(image: np.ndarray) -> dict[str, int]:

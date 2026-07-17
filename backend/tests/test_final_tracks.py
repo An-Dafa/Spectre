@@ -26,6 +26,8 @@ def test_new_live_classes_are_normalized() -> None:
     assert normalize_class_name("sim") == "SIM"
     assert normalize_class_name("NIK_Teks") == "Teks_Sensitif"
     assert normalize_class_name("teks sensitive") == "Teks_Sensitif"
+    assert normalize_class_name("ATM") == "ATM"
+    assert normalize_class_name("debit card") == "ATM"
 
 
 def test_bridge_layout_exposes_three_tracks() -> None:
