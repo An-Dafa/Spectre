@@ -12,7 +12,7 @@ import { formatMs, readNestedString } from "../../lib/format";
 const PAGE_ASSETS = {
   banner: "" as string,
 };
-const UPLOAD_PRIVACY_CLASSES = [...PRIVACY_CLASSES, "Resi", "KK", "ATM"];
+const UPLOAD_PRIVACY_CLASSES = [...PRIVACY_CLASSES, "Resi", "KK"];
 
 export function UserDocumentUploadView({
   redactionConfig,
