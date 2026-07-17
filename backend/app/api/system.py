@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.ai.class_map import CANONICAL_CLASSES, serialize_classes
-from app.core.config import get_settings
+from app.core.config import DEFAULT_CLASS_CONFIDENCE, get_settings
 from app.core.redaction_policy import ALLOWED_REDACTION_MODES, serialize_redaction_profiles
 from app.db.database import get_database_path
 from app.ai.runtime import detector
@@ -28,9 +28,12 @@ def health() -> dict[str, object]:
 
 @router.get("/model-info")
 def model_info() -> dict[str, object]:
+    effective_model_path = settings.effective_model_path
+    is_yolo26n = effective_model_path.name == "model_deteksi_yolo26n.pt"
     return {
         "model_path": str(settings.model_path),
-        "effective_model_path": str(settings.effective_model_path),
+        "effective_model_path": str(effective_model_path),
+        "model_filename": effective_model_path.name,
         "model_exists": detector.model_exists,
         "model_loaded": detector.loaded,
         "model_loading": detector.loading,
@@ -39,8 +42,8 @@ def model_info() -> dict[str, object]:
         "default_confidence": settings.model_confidence,
         "classes": CANONICAL_CLASSES,
         "model_loader": "ultralytics.YOLO",
-        "yolo26n_ready": True,
-        "yolo26n_note": "Any Ultralytics-compatible .pt model can be used through MODEL_PATH, including the new YOLO26n detector.",
+        "yolo26n_ready": is_yolo26n and detector.loaded,
+        "model_variant": "YOLO26n" if is_yolo26n else "legacy",
     }
 
 
@@ -51,6 +54,7 @@ def get_redaction_config() -> dict[str, object]:
         "allowed_modes": ALLOWED_REDACTION_MODES,
         "classes": serialize_classes(),
         "canonical_classes": CANONICAL_CLASSES,
+        "default_class_confidence": DEFAULT_CLASS_CONFIDENCE,
     }
 
 

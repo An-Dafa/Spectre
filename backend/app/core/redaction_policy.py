@@ -36,7 +36,7 @@ _REDACTION_PROFILES = {
         mode="blur",
         label_enabled=False,
         label_text="",
-        active_classes=("Wajah", "KTP", "KK", "SIM", "Resi"),
+        active_classes=("Wajah", "KTP", "KK", "SIM", "Kartu_ATM", "Resi"),
     ),
 }
 

@@ -185,8 +185,8 @@ async def redact_upload(
         label_text = str(policy.get("label_text") or "REDACTED")
         dynamic_injection = {"enabled": True, "policy": policy}
     else:
-        # Tanpa runtime policy: pakai default per-kelas dari config, dengan
-        # confidence_threshold skalar query param sebagai fallback per kelas.
+        # Without a runtime policy, use per-class defaults from config and keep
+        # the scalar confidence_threshold query parameter as the fallback.
         class_confidence = resolve_class_confidence({}, confidence_threshold)
         label_text = "REDACTED"
 

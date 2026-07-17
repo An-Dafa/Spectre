@@ -93,7 +93,7 @@ export function OperationalZoneView({
       {viewerUrl && (
         <SecureViewer
           url={viewerUrl}
-          title="Pratinjau Dokumen Tersensor"
+          title="Redacted Document Preview"
           onClose={() => setViewerUrl("")}
           isSensitive={false}
         />
@@ -108,7 +108,7 @@ export function OperationalZoneView({
           <h2>Redacted outputs and non-private metadata only.</h2>
           <p>
             This zone supports frontend operations: reviewing redaction results, process metadata, and output status
-            tanpa pernah menyimpan plaintext original.
+            without storing plaintext originals.
           </p>
         </div>
         <div className="operational-safe-pill">
@@ -123,7 +123,7 @@ export function OperationalZoneView({
           {privateOriginalCount > 0 && (
             <div className="result-box error-box">
               Detected {privateOriginalCount} records flagged as storing originals in the Operational Zone. Check the pipeline
-              backend sebelum demo.
+              backend before the demo.
             </div>
           )}
 
@@ -137,7 +137,7 @@ export function OperationalZoneView({
               />
             </label>
 
-            <div className="operational-filter-group" aria-label="Filter tabel operational zone">
+            <div className="operational-filter-group" aria-label="Filter operational zone table">
               <Filter size={16} />
               <select value={modeFilter} onChange={(event) => setModeFilter(event.target.value)}>
                 <option value="all">All modes</option>
@@ -173,9 +173,9 @@ export function OperationalZoneView({
                 <thead>
                   <tr>
                     <th>Record ID</th>
-                    <th>Dokumen Redacted</th>
+                    <th>Redacted Document</th>
                     <th>Mode</th>
-                    <th>Dibuat Pada</th>
+                    <th>Created At</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -209,7 +209,7 @@ export function OperationalZoneView({
                           <div className="document-cell">
                             <div>
                               <strong>{originalFilename}</strong>
-                              <small>{redactedFilename ? `Redacted: ${redactedFilename}` : "Redacted output belum tersedia"}</small>
+                              <small>{redactedFilename ? `Redacted: ${redactedFilename}` : "Redacted output unavailable"}</small>
                             </div>
                             {redactedUrl ? (
                               <button
