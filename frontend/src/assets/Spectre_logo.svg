@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 240" role="img" aria-labelledby="title description">
+  <title id="title">Spectre</title>
+  <desc id="description">Halftone sphere with the Spectre wordmark and Data Invisible, Privacy Intact tagline.</desc>
+  <defs>
+    <pattern id="dots" width="19" height="19" patternUnits="userSpaceOnUse">
+      <circle cx="9.5" cy="9.5" r="6.2" fill="#0a0b0d" />
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="white" />
+      <stop offset="0.48" stop-color="white" />
+      <stop offset="1" stop-color="black" />
+    </linearGradient>
+    <mask id="sphere-fade">
+      <ellipse cx="105" cy="104" rx="88" ry="88" fill="url(#fade)" />
+    </mask>
+    <clipPath id="sphere">
+      <ellipse cx="105" cy="104" rx="88" ry="88" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#sphere)" mask="url(#sphere-fade)" transform="rotate(-7 105 104)">
+    <rect x="10" y="9" width="190" height="190" fill="url(#dots)" />
+  </g>
+  <text x="225" y="118" fill="#08090b" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="400" letter-spacing="18">SP&#274;CTR&#274;</text>
+  <text x="230" y="166" fill="#34363a" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" letter-spacing="7">DATA INVISIBLE. PRIVACY INTACT.</text>
+</svg>
