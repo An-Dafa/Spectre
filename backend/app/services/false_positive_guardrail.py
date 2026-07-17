@@ -13,7 +13,7 @@ from app.utils.image_utils import clamp_box_to_image
 GUARDRAIL_MODES = {"privacy_first", "precision_demo", "off"}
 
 OFFICIAL_DOCUMENT_CLASSES = {"KTP", "KK", "SIM", "Paspor"}
-TEXT_FIELD_CLASSES = {"NIK_Teks", "Resi"}
+TEXT_FIELD_CLASSES = {"Teks_Sensitif", "Resi"}
 FACE_CLASSES = {"Wajah"}
 
 _KTP_KEYWORDS = ("NIK", "NAMA", "TEMPAT", "LAHIR", "JENIS", "KELAMIN", "ALAMAT", "AGAMA")
@@ -543,7 +543,7 @@ def _official_keyword_score(class_name: str, text: str) -> float:
 def _id_pattern_score(class_name: str, text: str) -> float:
     normalized = _normalize_text(text)
     digits = re.sub(r"\D", "", normalized)
-    if class_name in {"KTP", "NIK_Teks"}:
+    if class_name in {"KTP", "Teks_Sensitif"}:
         return 1.0 if _NIK_RE.search(normalized) or len(digits) >= 16 else 0.0
     if class_name == "SIM":
         return 1.0 if _SIM_NUMBER_RE.search(normalized) else 0.0

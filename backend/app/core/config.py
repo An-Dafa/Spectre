@@ -10,7 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
 # Per-class confidence defaults, dikalibrasi dari kurva F1/PR per kelas
-# (model.val() pada model_deteksi). Strong classes (KTP/KK/SIM/Paspor/NIK_Teks,
+# (model.val() pada model_deteksi). Strong classes (KTP/KK/SIM/Paspor/Teks_Sensitif,
 # AP>0.99) punya plateau F1 lebar -> threshold rendah-sedang tanpa buang recall.
 # Wajah (AP 0.970) kelas lemah + privacy-critical -> paling rendah demi recall.
 # Plat_Nomor (AP 0.968) F1 jatuh di conf<0.15 (banyak FP) -> floor dijaga.
@@ -20,7 +20,7 @@ DEFAULT_CLASS_CONFIDENCE: Dict[str, float] = {
     "KK": 0.35,
     "SIM": 0.35,
     "Paspor": 0.35,
-    "NIK_Teks": 0.30,
+    "Teks_Sensitif": 0.30,
     "Wajah": 0.25,
     "Plat_Nomor": 0.35,
     "Resi": 0.30,

@@ -24,6 +24,8 @@ def test_new_live_classes_are_normalized() -> None:
     assert normalize_class_name("Resi") == "Resi"
     assert normalize_class_name("shipping_label") == "Resi"
     assert normalize_class_name("sim") == "SIM"
+    assert normalize_class_name("NIK_Teks") == "Teks_Sensitif"
+    assert normalize_class_name("teks sensitive") == "Teks_Sensitif"
 
 
 def test_bridge_layout_exposes_three_tracks() -> None:

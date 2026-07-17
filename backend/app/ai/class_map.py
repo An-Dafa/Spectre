@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from fastapi import HTTPException, status
 
 
-CANONICAL_CLASSES = ["KTP", "KK", "SIM", "Paspor", "NIK_Teks", "Wajah", "Plat_Nomor", "Resi"]
+CANONICAL_CLASSES = ["KTP", "KK", "SIM", "Paspor", "Teks_Sensitif", "Wajah", "Plat_Nomor", "Resi"]
 
 _CLASS_ALIASES = {
     "ktp": "KTP",
@@ -17,11 +17,17 @@ _CLASS_ALIASES = {
     "surat izin mengemudi": "SIM",
     "paspor": "Paspor",
     "passport": "Paspor",
-    "nik": "NIK_Teks",
-    "nik_teks": "NIK_Teks",
-    "nik teks": "NIK_Teks",
-    "nik_text": "NIK_Teks",
-    "nik text": "NIK_Teks",
+    "nik": "Teks_Sensitif",
+    "nik_teks": "Teks_Sensitif",
+    "nik teks": "Teks_Sensitif",
+    "nik_text": "Teks_Sensitif",
+    "nik text": "Teks_Sensitif",
+    "teks_sensitif": "Teks_Sensitif",
+    "teks sensitif": "Teks_Sensitif",
+    "teks_sensitive": "Teks_Sensitif",
+    "teks sensitive": "Teks_Sensitif",
+    "sensitive_text": "Teks_Sensitif",
+    "sensitive text": "Teks_Sensitif",
     "wajah": "Wajah",
     "face": "Wajah",
     "plat_nomor": "Plat_Nomor",
@@ -50,7 +56,7 @@ CLASS_INFO = {
     "KK": ClassInfo("KK", "critical", "Kartu keluarga yang memuat data anggota keluarga."),
     "SIM": ClassInfo("SIM", "critical", "Dokumen izin mengemudi yang memuat identitas."),
     "Paspor": ClassInfo("Paspor", "critical", "Dokumen perjalanan yang memuat identitas legal."),
-    "NIK_Teks": ClassInfo("NIK_Teks", "critical", "Nomor induk kependudukan atau area teks NIK."),
+    "Teks_Sensitif": ClassInfo("Teks_Sensitif", "critical", "Nomor identitas, alamat, rekening, nomor telepon, atau teks sensitif lain."),
     "Wajah": ClassInfo("Wajah", "high", "Wajah pengguna atau pihak ketiga dalam citra."),
     "Plat_Nomor": ClassInfo("Plat_Nomor", "medium", "Nomor kendaraan yang dapat menjadi identifier."),
     "Resi": ClassInfo("Resi", "high", "Label pengiriman yang dapat memuat nama, alamat, dan nomor telepon."),
