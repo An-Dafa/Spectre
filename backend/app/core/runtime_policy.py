@@ -14,10 +14,10 @@ ALLOWED_POLICY_KEYS = {"policy_name", "confidence_threshold", "class_confidence_
 
 def default_runtime_policy() -> dict[str, Any]:
     return {
-        "policy_name": "Default Government Policy",
+        "policy_name": "Default Admin Policy",
         "confidence_threshold": 0.35,
         "class_confidence_threshold": dict(DEFAULT_CLASS_CONFIDENCE),
-        "profile": "government",
+        "profile": "admin",
         "redaction_mode": "black_box",
         "active_classes": CANONICAL_CLASSES,
         "disabled_classes": [],

@@ -9,12 +9,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
-# Per-class confidence defaults, dikalibrasi dari kurva F1/PR per kelas
-# (model.val() pada model_deteksi). Strong classes (KTP/KK/SIM/Paspor/Teks_Sensitif,
-# AP>0.99) punya plateau F1 lebar -> threshold rendah-sedang tanpa buang recall.
-# Wajah (AP 0.970) kelas lemah + privacy-critical -> paling rendah demi recall.
-# Plat_Nomor (AP 0.968) F1 jatuh di conf<0.15 (banyak FP) -> floor dijaga.
-# Untuk redaksi PII, bias ke recall tinggi (false negative = bocor data).
+# Per-class confidence defaults calibrated from each class F1/PR curve.
+# Privacy redaction is biased toward recall because false negatives leak data.
 DEFAULT_CLASS_CONFIDENCE: Dict[str, float] = {
     "KTP": 0.35,
     "KK": 0.35,
@@ -23,6 +19,7 @@ DEFAULT_CLASS_CONFIDENCE: Dict[str, float] = {
     "Teks_Sensitif": 0.30,
     "Wajah": 0.25,
     "Plat_Nomor": 0.35,
+    "Kartu_ATM": 0.30,
     "Resi": 0.30,
 }
 
@@ -32,13 +29,14 @@ class Settings(BaseSettings):
     api_host: str = "127.0.0.1"
     api_port: int = 8000
 
-    model_path: Path = Path("./models/model_deteksi.pt")
+    model_path: Path = Path("./models/model_deteksi_yolo26n.pt")
     model_confidence: float = Field(default=0.35, ge=0.01, le=0.99)
     model_class_confidence: Dict[str, float] = Field(default_factory=lambda: dict(DEFAULT_CLASS_CONFIDENCE))
     model_device: str = "cpu"
 
     database_url: str = "sqlite:///./storage/spectre.db"
 
+    admin_token: str = "spectre-admin-demo-token"
     government_token: str = "spectre-government-demo-token"
     approver_token: str = "spectre-approver-demo-token"
     crypto_admin_token: str = "spectre-crypto-admin-demo-token"
@@ -95,7 +93,7 @@ class Settings(BaseSettings):
     def effective_model_path(self) -> Path:
         if self.model_path.exists():
             return self.model_path
-        fallback = BACKEND_ROOT / "models" / "model_deteksi.pt"
+        fallback = BACKEND_ROOT / "models" / "model_deteksi_yolo26n.pt"
         return fallback if fallback.exists() else self.model_path
 
     @property

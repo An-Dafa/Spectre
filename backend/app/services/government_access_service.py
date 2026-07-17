@@ -18,7 +18,12 @@ settings = get_settings()
 
 def validate_government_token(token: str | None) -> None:
     if token != settings.government_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid government token")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid admin token")
+
+
+def validate_admin_token(token: str | None) -> None:
+    if token not in {settings.admin_token, settings.government_token}:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid admin token")
 
 
 def validate_approver_token(token: str | None) -> None:
@@ -43,7 +48,7 @@ def create_access_request(db: Session, record_id: str, requester: str, requester
         status="pending",
     )
     GovernmentAccessRequestRepository(db).add(request)
-    create_audit_log(db, record_id, "Government Access API", "access_request_created", requester, "Government access request created", {"request_id": request.request_id, "requester_role": requester_role})
+    create_audit_log(db, record_id, "Admin Access API", "access_request_created", requester, "Admin access request created", {"request_id": request.request_id, "requester_role": requester_role})
     return request
 
 
@@ -59,7 +64,7 @@ def approve_access_request(db: Session, request_id: str, approved_by: str) -> tu
     request.approved_at = utc_now()
     request.access_token_hash = sha256_bytes(token.encode("utf-8"))
     request.access_token_expires_at = utc_now() + timedelta(minutes=15)
-    create_audit_log(db, request.record_id, "Government Access API", "access_request_approved", approved_by, "Government access request approved", {"request_id": request.request_id, "expires_at": to_wib_iso(request.access_token_expires_at)})
+    create_audit_log(db, request.record_id, "Admin Access API", "access_request_approved", approved_by, "Admin access request approved", {"request_id": request.request_id, "expires_at": to_wib_iso(request.access_token_expires_at)})
     return request, token
 
 
@@ -103,5 +108,5 @@ def secure_original_download(db: Session, request_id: str, access_token: str) ->
     data = decrypt_original_from_vault(vault_record, db)
     request.access_token_used_at = utc_now()
     request.status = "used"
-    create_audit_log(db, request.record_id, "Government Access API / Vault Gateway", "authorized_original_decryption", request.requester, "Authorized original decryption", {"request_id": request.request_id, "approved_by": request.approved_by})
+    create_audit_log(db, request.record_id, "Admin Access API / Vault Gateway", "authorized_original_decryption", request.requester, "Authorized original decryption", {"request_id": request.request_id, "approved_by": request.approved_by})
     return data, vault_record.original_filename

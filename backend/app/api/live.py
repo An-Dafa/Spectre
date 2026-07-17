@@ -14,7 +14,7 @@ from app.utils.image_utils import cv2_image_to_bytes, get_image_shape, read_imag
 
 router = APIRouter(tags=["live-stream"])
 MAX_LIVE_FRAME_BYTES = 2_000_000
-DEFAULT_LIVE_CLASSES = "Wajah,KTP,KK,SIM,Resi"
+DEFAULT_LIVE_CLASSES = "Wajah,KTP,KK,SIM,Kartu_ATM,Resi"
 
 
 def _ensure_model_loaded() -> None:

@@ -17,6 +17,13 @@ class RedactionRule:
 
 
 _REDACTION_PROFILES = {
+    "admin": RedactionRule(
+        profile="admin",
+        mode="black_box",
+        label_enabled=True,
+        label_text="REDACTED",
+        active_classes=tuple(CANONICAL_CLASSES),
+    ),
     "government": RedactionRule(
         profile="government",
         mode="black_box",
@@ -29,7 +36,7 @@ _REDACTION_PROFILES = {
         mode="blur",
         label_enabled=False,
         label_text="",
-        active_classes=("Wajah", "KTP", "KK", "SIM", "Resi"),
+        active_classes=("Wajah", "KTP", "KK", "SIM", "Kartu_ATM", "Resi"),
     ),
 }
 

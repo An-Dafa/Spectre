@@ -84,7 +84,13 @@ async def redact_screen_image(
             continue
         x1, y1, x2, y2 = item["box"].values()
         cv2.rectangle(redacted, (x1, y1), (x2, y2), (0, 0, 0), thickness=-1)
-        detections.append({**item, "matched_rules": matched_rules})
+        detections.append(
+            {
+                "confidence": item["confidence"],
+                "box": item["box"],
+                "matched_rules": matched_rules,
+            }
+        )
 
     response = {
         "profile": "screen_shield_ocr",

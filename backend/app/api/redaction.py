@@ -143,7 +143,7 @@ async def redact_upload(
     db: Annotated[Session, Depends(get_db)],
     file: Annotated[UploadFile, File(...)],
     confidence_threshold: float = Query(default=settings.model_confidence, ge=0.01, le=0.99),
-    profile: str = "government",
+    profile: str = "admin",
     redaction_mode: str | None = None,
     active_classes: str | None = None,
     disabled_classes: str | None = None,
@@ -185,8 +185,8 @@ async def redact_upload(
         label_text = str(policy.get("label_text") or "REDACTED")
         dynamic_injection = {"enabled": True, "policy": policy}
     else:
-        # Tanpa runtime policy: pakai default per-kelas dari config, dengan
-        # confidence_threshold skalar query param sebagai fallback per kelas.
+        # Without a runtime policy, use per-class defaults from config and keep
+        # the scalar confidence_threshold query parameter as the fallback.
         class_confidence = resolve_class_confidence({}, confidence_threshold)
         label_text = "REDACTED"
 
@@ -205,7 +205,7 @@ async def redact_upload(
     inference_image, inference_scale = _prepare_inference_image(image, int(performance_settings["max_inference_size"]))
     prediction = (
         robust_predict_with_tta(detector, inference_image, class_confidence, tta_angles=str(performance_settings["tta_angles"]))
-        if performance_settings["document_tta"] and profile == "government"
+        if performance_settings["document_tta"] and profile in {"admin", "government"}
         else detector.predict(inference_image, class_confidence)
     )
     prediction = _scale_prediction_boxes(prediction, inference_scale)

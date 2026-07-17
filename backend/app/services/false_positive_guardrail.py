@@ -13,7 +13,7 @@ from app.utils.image_utils import clamp_box_to_image
 GUARDRAIL_MODES = {"privacy_first", "precision_demo", "off"}
 
 OFFICIAL_DOCUMENT_CLASSES = {"KTP", "KK", "SIM", "Paspor"}
-TEXT_FIELD_CLASSES = {"Teks_Sensitif", "Resi"}
+TEXT_FIELD_CLASSES = {"Teks_Sensitif", "Resi", "Kartu_ATM"}
 FACE_CLASSES = {"Wajah"}
 
 _KTP_KEYWORDS = ("NIK", "NAMA", "TEMPAT", "LAHIR", "JENIS", "KELAMIN", "ALAMAT", "AGAMA")
