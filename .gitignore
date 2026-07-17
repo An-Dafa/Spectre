@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 backend/storage/
 *.log
+frontend/node_modules/
+frontend/dist/
