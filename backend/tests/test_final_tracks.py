@@ -23,6 +23,8 @@ def test_new_live_classes_are_normalized() -> None:
     assert normalize_class_name("kartu keluarga") == "KK"
     assert normalize_class_name("Resi") == "Resi"
     assert normalize_class_name("shipping_label") == "Resi"
+    assert normalize_class_name("kartu_atm") == "Kartu_ATM"
+    assert normalize_class_name("debit card") == "Kartu_ATM"
     assert normalize_class_name("sim") == "SIM"
     assert normalize_class_name("NIK_Teks") == "Teks_Sensitif"
     assert normalize_class_name("teks sensitive") == "Teks_Sensitif"
@@ -49,6 +51,8 @@ def test_screen_ocr_redacts_matching_regions() -> None:
 
     assert result["profile"] == "screen_shield_ocr"
     assert result["redacted_count"] == 1
+    assert "text" not in result["detections"][0]
+    assert "3276010101010001" not in str(result)
     assert result["storage_policy"]["operational_zone_persisted"] is False
 
 

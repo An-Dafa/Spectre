@@ -42,7 +42,7 @@ class LiveTurboSession:
         camera_index: int = 0,
         confidence_threshold: float = 0.25,
         redaction_mode: str = "blur",
-        active_classes: str | None = "Wajah,KTP,KK,SIM,Resi",
+        active_classes: str | None = "Wajah,KTP,KK,SIM,Kartu_ATM,Resi",
         disabled_classes: str | None = None,
         target_width: int = 320,
         infer_interval_ms: int = 180,

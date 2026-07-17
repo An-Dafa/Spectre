@@ -23,6 +23,7 @@ DEFAULT_CLASS_CONFIDENCE: Dict[str, float] = {
     "Teks_Sensitif": 0.30,
     "Wajah": 0.25,
     "Plat_Nomor": 0.35,
+    "Kartu_ATM": 0.30,
     "Resi": 0.30,
 }
 
@@ -32,7 +33,7 @@ class Settings(BaseSettings):
     api_host: str = "127.0.0.1"
     api_port: int = 8000
 
-    model_path: Path = Path("./models/model_deteksi.pt")
+    model_path: Path = Path("./models/model_deteksi_yolo26n.pt")
     model_confidence: float = Field(default=0.35, ge=0.01, le=0.99)
     model_class_confidence: Dict[str, float] = Field(default_factory=lambda: dict(DEFAULT_CLASS_CONFIDENCE))
     model_device: str = "cpu"
@@ -95,7 +96,7 @@ class Settings(BaseSettings):
     def effective_model_path(self) -> Path:
         if self.model_path.exists():
             return self.model_path
-        fallback = BACKEND_ROOT / "models" / "model_deteksi.pt"
+        fallback = BACKEND_ROOT / "models" / "model_deteksi_yolo26n.pt"
         return fallback if fallback.exists() else self.model_path
 
     @property
