@@ -1,8 +1,6 @@
 <div align="center">
   <p>
-    <img src="frontend/src/assets/Logo_Spectre.jpeg" alt="Spectre logo" width="96" />
-    <br />
-    <img src="frontend/src/assets/Name_Spectre.jpeg" alt="Spectre" width="260" />
+    <img src="frontend/src/assets/Tagline_Spectre.png" alt="Spectre tagline" width="420" />
   </p>
 </div>
 
