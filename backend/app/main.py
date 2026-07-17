@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import audit, crypto, government, live, redaction, runtime, storage, system
+from app.api import audit, bridge, crypto, government, live, redaction, runtime, screen, storage, system
 from app.ai.runtime import detector
 from app.core.config import get_settings
 from app.db.database import init_db, session_scope
@@ -40,8 +40,10 @@ def root() -> dict[str, str]:
 
 
 app.include_router(system.router, prefix="/api")
+app.include_router(bridge.router, prefix="/api")
 app.include_router(redaction.router, prefix="/api")
 app.include_router(live.router, prefix="/api")
+app.include_router(screen.router, prefix="/api")
 app.include_router(storage.router, prefix="/api")
 app.include_router(crypto.router, prefix="/api")
 app.include_router(runtime.router, prefix="/api")

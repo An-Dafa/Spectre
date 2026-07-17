@@ -54,3 +54,33 @@ def get_redaction_config() -> dict[str, object]:
     }
 
 
+@router.get("/flow")
+def flow() -> dict[str, object]:
+    return {
+        "app": settings.app_name,
+        "role": "visual privacy middleware",
+        "journey": ["source_unsafe", "spectre_edge_engine", "destination_safe"],
+        "tracks": {
+            "enterprise_kyc": {
+                "source": "third-party registration or KYC upload",
+                "middleware": "local document detection, redaction, vault encryption, audit",
+                "destination": "operational server receives redacted image only",
+                "endpoint": "/api/redact",
+            },
+            "liveshield": {
+                "source": "raw webcam or live frame",
+                "middleware": "ephemeral frame detection and redaction",
+                "destination": "public broadcast receives redacted frame only",
+                "endpoints": ["/api/live/redact-frame", "/api/live/ws"],
+            },
+            "screen_shield": {
+                "source": "screen-share text or OCR output",
+                "middleware": "regex/text redaction for sensitive identifiers",
+                "destination": "meeting transport receives redacted text only",
+                "endpoints": ["/api/screen/redact", "/api/screen/ocr-redact"],
+            },
+        },
+        "bridge_layout_endpoint": "/api/bridge/layout",
+    }
+
+
