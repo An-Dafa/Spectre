@@ -1,3 +1,14 @@
-fastapi
+﻿fastapi
 uvicorn[standard]
+python-multipart
 pydantic
+pydantic-settings
+sqlalchemy
+ultralytics
+opencv-python
+numpy
+pillow
+pymupdf==1.28.0
+cryptography
+python-dotenv
+easyocr

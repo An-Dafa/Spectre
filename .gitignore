@@ -1,3 +1,5 @@
 /PrivAI
 __pycache__/
 *.py[cod]
+backend/storage/
+*.log
